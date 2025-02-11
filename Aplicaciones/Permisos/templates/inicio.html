@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2>Panel de Estadísticas</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white text-center p-3">
+                <h4>Proyectos</h4>
+                <h2 id="total_proyectos">{{ total_proyectos }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white text-center p-3">
+                <h4>Municipios</h4>
+                <h2 id="total_municipios">{{ total_municipios }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white text-center p-3">
+                <h4>Condiciones</h4>
+                <h2 id="total_condiciones">{{ total_condiciones }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white text-center p-3">
+                <h4>Autorizaciones</h4>
+                <h2 id="total_autorizaciones">{{ total_autorizaciones }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript para actualización automática -->
+<script>
+    function actualizarEstadisticas() {
+        fetch("{% url 'api_estadisticas' %}") // Llamar a la API que devuelve los totales
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("total_proyectos").innerText = data.total_proyectos;
+            document.getElementById("total_municipios").innerText = data.total_municipios;
+            document.getElementById("total_condiciones").innerText = data.total_condiciones;
+            document.getElementById("total_autorizaciones").innerText = data.total_autorizaciones;
+        })
+        .catch(error => console.error("Error actualizando estadísticas:", error));
+    }
+
+    // Actualizar cada 5 segundos
+    setInterval(actualizarEstadisticas, 5000);
+</script>
+
+{% endblock %}

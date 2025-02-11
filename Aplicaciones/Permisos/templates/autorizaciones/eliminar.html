@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Eliminar Autorización{% endblock %}
+{% block content %}
+
+<h2 class="text-danger">¿Estás seguro de eliminar esta autorización?</h2>
+<p><strong>Proyecto:</strong> {{ autorizacion.proyecto.nombre }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'listar_autorizaciones' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %}

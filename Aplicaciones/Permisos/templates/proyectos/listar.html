@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Lista de Proyectos{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Lista de Proyectos</h2>
+</div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{% url 'crear_proyecto' %}" class="btn btn-primary">Nuevo Proyecto</a> <br>
+</div>
+
+<table class="table table-striped datatable">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Municipio</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Plano</th>  <!-- 🖼️ Nueva columna para el plano -->
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for proyecto in proyectos %}
+        <tr>
+            <td>{{ proyecto.id }}</td>
+            <td>{{ proyecto.nombre }}</td>
+            <td>{{ proyecto.municipio.nombre }}</td>
+            <td>{{ proyecto.get_tipo_proyecto_display }}</td>
+            <td>
+                <span class="badge bg-{% if proyecto.estado == 'aprobado' %}success{% elif proyecto.estado == 'rechazado' %}danger{% else %}warning{% endif %}">
+                    {{ proyecto.get_estado_display }}
+                </span>
+            </td>
+            <td>
+                {% if proyecto.plano %}
+                    <img src="{{ proyecto.plano.url }}" alt="Plano" width="80">  <!-- 🖼️ Mostrar imagen en miniatura -->
+                {% else %}
+                    <span class="text-muted">No disponible</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'editar_proyecto' proyecto.id %}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="{% url 'eliminar_proyecto' proyecto.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="text-center">No hay proyectos registrados.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
